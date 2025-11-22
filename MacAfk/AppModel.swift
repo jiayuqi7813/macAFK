@@ -4,7 +4,13 @@ import Combine
 
 class AppModel: ObservableObject {
     @Published var isJiggling = false
-    @Published var isLowBrightness = false
+    @Published var isLowBrightness = false {
+        didSet {
+            if !isLoading {
+                saveLowBrightnessMode()
+            }
+        }
+    }
     @Published var testBrightness: Float = 0.5  // 测试用的亮度值（0.0 - 1.0）
     
     // 子对象：使用普通属性 + Combine 订阅
@@ -15,7 +21,12 @@ class AppModel: ObservableObject {
     // Combine 订阅
     private var cancellables = Set<AnyCancellable>()
     
+    // 持久化相关
+    private let lowBrightnessKey = "app.lowBrightnessMode"
+    private var isLoading = false
+    
     init() {
+        loadLowBrightnessMode()
         // 订阅 jiggler 的变化，转发给 AppModel
         jiggler.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
@@ -103,5 +114,23 @@ class AppModel: ObservableObject {
         let currentBrightness = brightnessControl.getCurrentBrightness()
         testBrightness = currentBrightness
         print("🔄 [AppModel] 重置亮度为: \(currentBrightness)")
+    }
+    
+    // MARK: - 持久化
+    
+    /// 保存低亮度模式状态到 UserDefaults
+    private func saveLowBrightnessMode() {
+        UserDefaults.standard.set(isLowBrightness, forKey: lowBrightnessKey)
+        print("💾 [AppModel] 已保存低亮度模式状态: \(isLowBrightness)")
+    }
+    
+    /// 从 UserDefaults 加载低亮度模式状态
+    private func loadLowBrightnessMode() {
+        isLoading = true
+        defer { isLoading = false }
+        
+        let savedValue = UserDefaults.standard.bool(forKey: lowBrightnessKey)
+        isLowBrightness = savedValue
+        print("📖 [AppModel] 已加载低亮度模式状态: \(isLowBrightness)")
     }
 }
