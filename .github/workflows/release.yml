@@ -67,36 +67,32 @@ jobs:
       id: release_notes
       run: |
         cat > release_notes.md << 'EOF'
-        ## MacAfk ${{ env.VERSION }}
+        ## MacAfk Pro ${{ env.VERSION }}
         
         ### 📦 下载
         
         选择适合你的版本：
         
-        #### Pro 版本（推荐）
-        - **通用版本** (Apple Silicon + Intel): `MacAfk-Pro-Universal-${{ env.VERSION }}.dmg`
+        - **通用版本** (Apple Silicon + Intel): `MacAfk-Pro-Universal-${{ env.VERSION }}.dmg` ⭐️ 推荐
         - **Apple Silicon 专用**: `MacAfk-Pro-arm64-${{ env.VERSION }}.dmg`
         - **Intel 专用**: `MacAfk-Pro-x86_64-${{ env.VERSION }}.dmg`
         
-        **特性**：
-        - ✅ 真实硬件亮度控制
+        ### ✨ 特性
+        
+        - ✅ 真实硬件亮度控制（DisplayServices API）
         - ✅ 更好的省电效果
-        - ✅ 独立发布
+        - ✅ 鼠标自动抖动，防止休眠
+        - ✅ 快捷键控制（可自定义）
+        - ✅ 多语言支持（中文/英文）
+        - ✅ 菜单栏小图标，不占用 Dock
+        - ✅ 抖动间隔设置持久化
+        - ✅ 多架构支持（Apple Silicon + Intel）
         
         ### 🔧 安装说明
         
         1. 下载适合你的 DMG 文件
         2. 打开 DMG，将应用拖到"应用程序"文件夹
         3. 首次运行时，在「系统设置 > 隐私与安全性 > 辅助功能」中授予权限
-        
-        ### ✨ 特性
-        
-        - ✅ 真实硬件亮度控制
-        - ✅ 多语言支持（中文/英文）
-        - ✅ 抖动间隔设置持久化
-        - ✅ 可自定义快捷键
-        - ✅ 状态栏菜单集成
-        - ✅ 多架构支持（Apple Silicon + Intel）
         
         ### 🔐 校验和
         
@@ -115,6 +111,8 @@ jobs:
         ---
         
         **系统要求**：macOS 13.0 或更高版本
+        
+        **注意**：如果需要 App Store 版本，请访问 [MacAfk Lite 仓库](https://github.com/jiayuqi7813/macAFK-lite)
         EOF
         
         echo "release_notes<<EOF" >> $GITHUB_OUTPUT

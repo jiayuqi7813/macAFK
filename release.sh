@@ -261,7 +261,7 @@ create_release_tag() {
 
 版本特性:
 - Pro 版本 (ARM64, x86_64, Universal)
-- Lite 版本 (ARM64, x86_64, Universal)
+- 真实硬件亮度控制
 - 多语言支持 (中文/英文)
 - 自动构建和发布"
     
@@ -326,10 +326,10 @@ show_release_info() {
     echo ""
     
     print_info "⏳ 后续步骤:"
-    echo "   1. GitHub Actions 正在自动构建所有版本"
+    echo "   1. GitHub Actions 正在自动构建 Pro 版本"
     echo "   2. 构建完成后将自动创建 Release"
     echo "   3. 所有 DMG 文件将自动上传"
-    echo "   4. 预计等待时间: 10-15 分钟"
+    echo "   4. 预计等待时间: 8-10 分钟"
     echo ""
     
     print_warning "💡 提示:"
