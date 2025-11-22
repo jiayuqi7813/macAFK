@@ -7,6 +7,7 @@ set -e
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_NAME="MacAfk"
+PRODUCT_NAME="MacAfk Pro"  # Release 配置中的实际产品名称
 
 BUILD_DIR="$PROJECT_DIR/Build"
 ARCHIVE_DIR="$PROJECT_DIR/Archives"
@@ -52,7 +53,7 @@ build_variant() {
     # 导出 app（直接复制，不使用 exportArchive 以避免签名问题）
     echo "📤 导出应用..."
     mkdir -p "$export_path"
-    cp -R "$ARCHIVE_DIR/${archive_name}.xcarchive/Products/Applications/MacAfk Pro.app" "$export_path/"
+    cp -R "$ARCHIVE_DIR/${archive_name}.xcarchive/Products/Applications/${PRODUCT_NAME}.app" "$export_path/"
     
     echo "✅ MacAfk Pro ($arch) 构建完成！"
 }
@@ -100,19 +101,22 @@ create_universal() {
     echo ""
     echo "📦 合并 Pro 版本 (arm64 + x86_64)..."
     
-    local arm_app="$BUILD_DIR/Pro-arm64/MacAfk Pro.app"
-    local x86_app="$BUILD_DIR/Pro-x86_64/MacAfk Pro.app"
+    local arm_app="$BUILD_DIR/Pro-arm64/${PRODUCT_NAME}.app"
+    local x86_app="$BUILD_DIR/Pro-x86_64/${PRODUCT_NAME}.app"
     local universal_dir="$BUILD_DIR/Pro-Universal"
-    local universal_app="$universal_dir/MacAfk Pro.app"
+    local universal_app="$universal_dir/${PRODUCT_NAME}.app"
     
     mkdir -p "$universal_dir"
     cp -R "$arm_app" "$universal_app"
     
-    # 合并二进制文件
+    # 合并二进制文件（可执行文件名称可能是"MacAfk Pro"或"MacAfk"）
+    local executable_name=$(basename "$arm_app/Contents/MacOS/"*)
+    echo "🔍 检测到可执行文件: $executable_name"
+    
     lipo -create \
-        "$arm_app/Contents/MacOS/$PROJECT_NAME" \
-        "$x86_app/Contents/MacOS/$PROJECT_NAME" \
-        -output "$universal_app/Contents/MacOS/$PROJECT_NAME"
+        "$arm_app/Contents/MacOS/$executable_name" \
+        "$x86_app/Contents/MacOS/$executable_name" \
+        -output "$universal_app/Contents/MacOS/$executable_name"
     
     # 创建 Universal DMG
     local dmg_name="MacAfk-Pro-Universal-v${VERSION}.dmg"
