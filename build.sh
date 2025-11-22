@@ -49,11 +49,10 @@ build_variant() {
         CODE_SIGNING_REQUIRED=NO \
         CODE_SIGNING_ALLOWED=NO
     
-    # 导出 app
-    xcodebuild -exportArchive \
-        -archivePath "$ARCHIVE_DIR/${archive_name}.xcarchive" \
-        -exportPath "$export_path" \
-        -exportOptionsPlist "$PROJECT_DIR/ExportOptions-Pro.plist"
+    # 导出 app（直接复制，不使用 exportArchive 以避免签名问题）
+    echo "📤 导出应用..."
+    mkdir -p "$export_path"
+    cp -R "$ARCHIVE_DIR/${archive_name}.xcarchive/Products/Applications/MacAfk Pro.app" "$export_path/"
     
     echo "✅ MacAfk Pro ($arch) 构建完成！"
 }
