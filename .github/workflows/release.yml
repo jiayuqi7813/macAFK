@@ -18,6 +18,8 @@ jobs:
   build-and-release:
     name: 构建并发布
     runs-on: macos-latest
+    permissions:
+      contents: write  # 允许创建 Release 和上传文件
     
     steps:
     - name: 检出代码
