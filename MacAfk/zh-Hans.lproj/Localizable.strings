@@ -83,3 +83,30 @@
 "settings.restore_brightness" = "恢复";
 "settings.brightness_preview_hint" = "使用滑块调整亮度级别。点击预览按钮可测试亮度效果。";
 
+// Update
+"update.check_for_updates" = "检查更新";
+"update.current_version" = "当前版本";
+"update.checking" = "正在检查更新...";
+"update.up_to_date" = "已是最新版本！";
+"update.new_version_available" = "发现新版本";
+"update.check_now" = "立即检查";
+"update.available.title" = "发现更新";
+"update.release_notes" = "更新说明：";
+"update.downloading" = "正在下载...";
+"update.open_github" = "在 GitHub 中打开";
+"update.download_install" = "下载并安装";
+"update.cancel_download" = "取消下载";
+"update.retry" = "重试";
+"update.install.manual.title" = "准备安装";
+"update.install.manual.message" = "更新文件已下载到您的下载文件夹。请打开 DMG 文件并将应用拖到应用程序文件夹以完成安装。";
+
+// Update Errors
+"update.error.invalid_url" = "无效的 URL";
+"update.error.network" = "网络错误";
+"update.error.no_data" = "未接收到数据";
+"update.error.parse" = "解析响应失败";
+"update.error.no_compatible_asset" = "未找到适合您系统的安装包";
+"update.error.invalid_download_url" = "无效的下载 URL";
+"update.error.download" = "下载失败";
+"update.error.save_file" = "保存文件失败";
+

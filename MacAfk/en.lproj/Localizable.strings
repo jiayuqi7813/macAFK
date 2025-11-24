@@ -83,3 +83,30 @@
 "settings.restore_brightness" = "Restore";
 "settings.brightness_preview_hint" = "Use the slider to adjust brightness level. Click Preview to test the brightness.";
 
+// Update
+"update.check_for_updates" = "Check for Updates";
+"update.current_version" = "Current Version";
+"update.checking" = "Checking for updates...";
+"update.up_to_date" = "You're up to date!";
+"update.new_version_available" = "New version available";
+"update.check_now" = "Check Now";
+"update.available.title" = "Update Available";
+"update.release_notes" = "Release Notes:";
+"update.downloading" = "Downloading...";
+"update.open_github" = "Open in GitHub";
+"update.download_install" = "Download & Install";
+"update.cancel_download" = "Cancel Download";
+"update.retry" = "Retry";
+"update.install.manual.title" = "Installation Ready";
+"update.install.manual.message" = "The update has been downloaded to your Downloads folder. Please open the DMG file and drag the app to your Applications folder to complete the installation.";
+
+// Update Errors
+"update.error.invalid_url" = "Invalid URL";
+"update.error.network" = "Network error";
+"update.error.no_data" = "No data received";
+"update.error.parse" = "Failed to parse response";
+"update.error.no_compatible_asset" = "No compatible installer found for your system";
+"update.error.invalid_download_url" = "Invalid download URL";
+"update.error.download" = "Download failed";
+"update.error.save_file" = "Failed to save file";
+
