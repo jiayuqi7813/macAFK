@@ -112,3 +112,8 @@
 "update.error.download" = "Download failed";
 "update.error.save_file" = "Failed to save file";
 
+// Accessibility Permission
+"permission.accessibility.title" = "Accessibility Permission Required";
+"permission.accessibility.message" = "MacAfk Pro needs Accessibility permission to monitor global shortcuts and simulate mouse movements.\n\nPlease grant permission in System Settings and restart the app.";
+"permission.open_settings" = "Open System Settings";
+

@@ -112,3 +112,8 @@
 "update.error.download" = "下载失败";
 "update.error.save_file" = "保存文件失败";
 
+// Accessibility Permission
+"permission.accessibility.title" = "需要辅助功能权限";
+"permission.accessibility.message" = "MacAfk Pro 需要辅助功能权限来监听全局快捷键和模拟鼠标移动。\n\n请在系统设置中授予权限后重启应用。";
+"permission.open_settings" = "打开系统设置";
+

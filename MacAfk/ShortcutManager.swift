@@ -2,6 +2,7 @@ import Foundation
 import Carbon
 import AppKit
 import Combine
+import ApplicationServices
 
 /// 快捷键动作类型
 enum ShortcutAction: Hashable, Codable {
@@ -94,6 +95,7 @@ class ShortcutManager: ObservableObject {
     var onAction: ((ShortcutAction) -> Void)?
     
     private var eventMonitor: Any?
+    private var localEventMonitor: Any?
     private let userDefaultsKey = "customShortcuts"
     
     // 默认快捷键配置
@@ -129,15 +131,40 @@ class ShortcutManager: ObservableObject {
     }
     
     func startListening() {
-        // 使用全局事件监听器
+        // 停止现有监听器（如果有）
+        stopListening()
+        
+        // 检查辅助功能权限
+        let checkOptPrompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String
+        let options = [checkOptPrompt: false] as CFDictionary
+        let hasPermission = AXIsProcessTrustedWithOptions(options)
+        
+        if !hasPermission {
+            print("⚠️ [ShortcutManager] 没有辅助功能权限，全局快捷键将不可用")
+            // 仍然创建本地监听器，至少在应用前台时可用
+        } else {
+            print("✅ [ShortcutManager] 辅助功能权限已授予")
+        }
+        
+        // 使用全局事件监听器（在应用后台时也能工作，需要辅助功能权限）
         eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
             self?.handleEvent(event)
         }
         
+        if eventMonitor != nil {
+            print("✅ [ShortcutManager] 全局事件监听器已创建")
+        } else {
+            print("❌ [ShortcutManager] 全局事件监听器创建失败（可能缺少辅助功能权限）")
+        }
+        
         // 同时监听本地事件（当应用在前台时）
-        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+        localEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             self?.handleEvent(event)
             return event
+        }
+        
+        if localEventMonitor != nil {
+            print("✅ [ShortcutManager] 本地事件监听器已创建")
         }
         
         print("✅ [ShortcutManager] 快捷键监听已启动")
@@ -148,6 +175,11 @@ class ShortcutManager: ObservableObject {
             NSEvent.removeMonitor(monitor)
             eventMonitor = nil
         }
+        if let monitor = localEventMonitor {
+            NSEvent.removeMonitor(monitor)
+            localEventMonitor = nil
+        }
+        print("⏹️ [ShortcutManager] 快捷键监听已停止")
     }
     
     private func handleEvent(_ event: NSEvent) {

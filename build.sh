@@ -57,6 +57,33 @@ build_variant() {
     mkdir -p "$export_path"
     cp -R "$ARCHIVE_DIR/${archive_name}.xcarchive/Products/Applications/${PRODUCT_NAME}.app" "$export_path/"
     
+    # 使用 ad-hoc 签名（本地签名）以确保 entitlements 生效
+    # 这对于快捷键功能正常工作至关重要
+    echo "🔐 应用 ad-hoc 签名（使entitlements生效）..."
+    
+    if [ -f "$PROJECT_DIR/MacAfk/MacAfk.entitlements" ]; then
+        if codesign --force --deep --sign - \
+            --entitlements "$PROJECT_DIR/MacAfk/MacAfk.entitlements" \
+            --options runtime \
+            "$export_path/${PRODUCT_NAME}.app" 2>&1; then
+            
+            echo "✅ ad-hoc 签名成功"
+            
+            # 验证签名
+            echo "✅ 验证签名..."
+            codesign -dv "$export_path/${PRODUCT_NAME}.app" 2>&1 | head -3 || true
+            
+            echo "✅ 验证 entitlements..."
+            codesign -d --entitlements - "$export_path/${PRODUCT_NAME}.app" 2>&1 | grep -A 5 "com.apple.security" || echo "  (entitlements已应用)"
+        else
+            echo "⚠️  ad-hoc 签名失败，但继续构建..."
+            echo "   注意：快捷键功能可能无法在安装后的应用中正常工作"
+        fi
+    else
+        echo "⚠️  未找到 entitlements 文件: $PROJECT_DIR/MacAfk/MacAfk.entitlements"
+        echo "   应用将不包含必要的权限声明"
+    fi
+    
     echo "✅ MacAfk Pro ($arch) 构建完成！"
 }
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSAccessibilityUsageDescription</key>
+	<string>MacAfk Pro 需要辅助功能权限来监听全局快捷键和模拟鼠标移动以防止系统休眠。</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>MacAfk Pro 需要访问 Apple Events 来实现全局快捷键功能。</string>
+</dict>
+</plist>
+

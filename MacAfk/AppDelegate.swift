@@ -6,10 +6,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var appModel = AppModel()
     private let languageManager = LanguageManager.shared
     private let updateManager = UpdateManager.shared
+    private let permissionManager = AccessibilityPermissionManager.shared
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // 初始状态：隐藏 Dock 图标，只在状态栏显示
+        // 使用 .accessory 而不是 .prohibited，这样可以接收全局事件
         NSApp.setActivationPolicy(.accessory)
+        
+        // 检查并请求辅助功能权限
+        checkAndRequestAccessibilityPermission()
         
         // Create the status item
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -179,14 +184,45 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             
             if visibleWindows.isEmpty {
-                // 所有窗口关闭后，隐藏 Dock 图标
+                // 所有窗口关闭后，隐藏 Dock 图标，但保持 accessory 状态以接收全局事件
                 NSApp.setActivationPolicy(.accessory)
+                
+                // 确保快捷键监听器仍然活跃
+                print("ℹ️ [AppDelegate] 窗口已关闭，应用在后台运行，快捷键监听保持活跃")
             }
         }
     }
     
     @objc func quit() {
         NSApplication.shared.terminate(nil)
+    }
+    
+    // MARK: - Accessibility Permission
+    
+    private func checkAndRequestAccessibilityPermission() {
+        // 延迟检查，确保应用完全启动
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self = self else { return }
+            
+            if !self.permissionManager.checkAccessibilityPermission() {
+                print("⚠️ [AppDelegate] 未检测到辅助功能权限，正在请求...")
+                self.permissionManager.requestAccessibilityPermission()
+                
+                // 监控权限状态变化
+                self.permissionManager.startMonitoringPermission { granted in
+                    if granted {
+                        print("✅ [AppDelegate] 辅助功能权限已授予，重启快捷键监听...")
+                        // 重启快捷键监听
+                        DispatchQueue.main.async {
+                            self.appModel.shortcutManager.stopListening()
+                            self.appModel.shortcutManager.startListening()
+                        }
+                    }
+                }
+            } else {
+                print("✅ [AppDelegate] 辅助功能权限已授予")
+            }
+        }
     }
     
     // MARK: - Menu Bar Icon
