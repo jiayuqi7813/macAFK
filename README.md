@@ -1,4 +1,6 @@
-# MacAfk - macOS 防休眠工具
+# MacAfk - macOS Anti-Sleep Tool
+
+![image](./assets/image.png)
 
 <p align="center">
   <img src="https://img.shields.io/badge/platform-macOS-blue" alt="Platform">
@@ -6,262 +8,217 @@
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
 </p>
 
->由于大多数企业电脑的 macOS 存在通过 MDM 管控禁止用户修改锁屏时间的情况，并且现在很多人都习惯将任务分配给 LLM Agent，然后自己去~~摸鱼~~。而此时电脑锁屏会影响大模型任务失败，所以开发了这款程序。
+<p align="center">
+  <a href="README.md">English</a> | <a href="README_CN.md">中文</a>
+</p>
 
->你可以安心地打开它,它会通过鼠标细微（根本无法察觉）的抖动来防止系统进入休眠状态。
+> Most enterprise macOS computers are managed via MDM, which prevents users from modifying screen lock settings. Additionally, many people now delegate tasks to LLM Agents and then... take a break. However, screen lock can cause AI agent tasks to fail, which is why this tool was developed.
 
----
-
-
-## ✨ 主要特性
-
-### 🖱️ 防休眠功能
-- **自动鼠标抖动** - 防止系统进入休眠状态
-- **可调节间隔** - 10秒到10分钟，6个档位可选
-- **无感操作** - 1像素移动，完全不影响工作
-
-### 🌙 智能亮度控制
-- **双模式支持**
-  - **Pro 版**：真实硬件亮度控制（DisplayServices API）
-  - **Lite 版**：软件调光（Gamma 表，App Store 兼容）
-- **自动检测** - 根据运行环境自动选择最佳模式
-- **低亮度模式** - 一键降低屏幕亮度，省电延长续航
-
-### ⌨️ 强大的快捷键系统
-- **全局快捷键** - 后台运行也能快速控制
-- **完全自定义** - 可视化编辑器，实时录制新快捷键
-- **自动保存** - 配置持久化，重启后保留
-
-### 🎨 现代化界面
-- **SwiftUI 构建** - 原生 macOS 体验
-- **状态栏集成** - 轻量化，不占用 Dock 空间
-- **直观操作** - 一目了然的状态显示
+> You can safely run it, and it will prevent the system from entering sleep mode through subtle (imperceptible) mouse movements.
 
 ---
 
-## 📦 双版本说明
+## ✨ Key Features
 
-| 版本 | MacAfk Pro | MacAfk Lite |
-|------|-----------|-------------|
-| **亮度控制** | DisplayServices（真实硬件）| Gamma 调光（软件模拟）|
-| **省电效果** | ✅ 真实降低功耗 | ❌ 屏幕背光不变 |
-| **沙盒** | ❌ 禁用 | ✅ 启用 |
-| **App Store** | ❌ 不可上架 | ✅ 可上架 |
-| **用户体验** | ⭐️⭐️⭐️⭐️⭐️ | ⭐️⭐️⭐️⭐️ |
-| **发布渠道** | GitHub/网站 | App Store |
-| **推荐人群** | 追求最佳体验 | 需要 App Store 版本 |
+### 🖱️ Anti-Sleep Functionality
+- **Automatic Mouse Jiggling** - Prevents system from entering sleep mode
+- **Adjustable Intervals** - 6 levels from 10 seconds to 10 minutes
+- **Imperceptible Operation** - 1-pixel movement, completely unobtrusive
+
+### 🌙 Smart Brightness Control
+- **Dual Mode Support**
+  - **Pro Version**: Real hardware brightness control (DisplayServices API)
+  - **Lite Version**: Software dimming (Gamma table, App Store compatible)
+- **Auto Detection** - Automatically selects the best mode based on runtime environment
+- **Low Brightness Mode** - One-click screen dimming to save power and extend battery life
+
+### ⌨️ Powerful Shortcut System
+- **Global Shortcuts** - Quick control even when running in background
+- **Fully Customizable** - Visual editor with real-time shortcut recording
+- **Auto Save** - Persistent configuration, retained after restart
+
+### 🎨 Modern Interface
+- **SwiftUI Built** - Native macOS experience
+- **Menu Bar Integration** - Lightweight, doesn't occupy Dock space
+- **Intuitive Operation** - Clear status display at a glance
 
 ---
 
-## 🚀 快速开始
+## 📦 Dual Version Overview
 
-### 下载安装
+| Version | MacAfk Pro | MacAfk Lite |
+|---------|-----------|-------------|
+| **Brightness Control** | DisplayServices (Real Hardware) | Gamma Dimming (Software Simulation) |
+| **Power Saving** | ✅ Real power reduction | ❌ Screen backlight unchanged |
+| **Sandbox** | ❌ Disabled | ✅ Enabled |
+| **App Store** | ❌ Not available | ✅ Available |
+| **User Experience** | ⭐️⭐️⭐️⭐️⭐️ | ⭐️⭐️⭐️⭐️ |
+| **Distribution** | GitHub/Website | App Store |
+| **Target Users** | Best experience seekers | App Store version needed |
 
-#### Pro 版（推荐）
+---
+
+## 🚀 Quick Start
+
+### Download & Install
+
+#### Pro Version (Recommended)
 ```bash
-# GitHub Releases 下载
-https://github.com/yourusername/MacAfk/releases
-
-# 或使用 Homebrew
-brew install --cask macafk-pro
+# Download from GitHub Releases
+https://github.com/jiayuqi7813/macAFK-Pro/releases
 ```
 
-#### Lite 版
-- App Store: [搜索 "MacAfk Lite"](#)
+#### Lite Version
+- App Store: [Search "MacAfk Lite"](#)
 
-### 首次运行
+### First Run
 
-1. **授予辅助功能权限**
-   - 打开「系统设置」→「隐私与安全性」→「辅助功能」
-   - 添加 MacAfk 并启用
+1. **Grant Accessibility Permission**
+   - Open "System Settings" → "Privacy & Security" → "Accessibility"
+   - Add MacAfk and enable it
 
-2. **启动应用**
-   - 点击状态栏图标
-   - 或使用快捷键 `⌘ ⌃ S`
+2. **Launch Application**
+   - Click the menu bar icon
+   - Or use shortcut `⌘ ⌃ S`
 
-3. **开始使用**
-   - 开启防休眠：点击按钮或按 `⌘ ⌃ S`
-   - 启用低亮度：勾选开关或按 `⌘ ⌃ B`
-
----
-
-## ⌨️ 默认快捷键
-
-| 快捷键 | 功能 |
-|--------|------|
-| `⌘ ⌃ S` | 切换防休眠 |
-| `⌘ ⌃ B` | 切换低亮度模式 |
-| `⌘ ⌃ ↑` | 增加抖动间隔 |
-| `⌘ ⌃ ↓` | 减少抖动间隔 |
-
-**自定义快捷键**：点击主界面的「自定义所有快捷键」按钮
+3. **Start Using**
+   - Enable anti-sleep: Click button or press `⌘ ⌃ S`
+   - Enable low brightness: Toggle switch or press `⌘ ⌃ B`
 
 ---
 
-## 🔧 从源码构建
+## ⌨️ Default Shortcuts
 
-### 环境要求
+| Shortcut | Function |
+|----------|----------|
+| `⌘ ⌃ S` | Toggle anti-sleep |
+| `⌘ ⌃ B` | Toggle low brightness mode |
+| `⌘ ⌃ ↑` | Increase jiggle interval |
+| `⌘ ⌃ ↓` | Decrease jiggle interval |
+
+**Custom Shortcuts**: Click "Customize All Shortcuts" button in the main interface
+
+---
+
+## 🔧 Build from Source
+
+### Requirements
 - macOS 10.15+
-- Xcode 13.0+
+- Xcode 14.0+
 - Swift 5.0+
 
-### 构建步骤
+### Build Steps
 
-#### 快速构建
+#### Quick Build
 ```bash
 cd MacAfk
 xcodebuild -scheme MacAfk -configuration Debug build
 ```
 
-#### 构建双版本
+#### Build Both Versions
 ```bash
-# 使用自动化脚本
+# Using automated script
 ./build.sh
 
-# 或手动构建
-# Pro 版（真实亮度）
+# Or manual build
+# Pro Version (Real brightness)
 xcodebuild -scheme MacAfk -configuration Release build
 
-# Lite 版（Gamma 调光）
+# Lite Version (Gamma dimming)
 xcodebuild -scheme MacAfk -configuration Release-AppStore build
 ```
 
 ---
 
-## 📖 使用场景
+## 📖 Use Cases
 
-### 场景1：演示/会议 🎤
+### Case 1: AI Agent Auto-Suspend
 ```
-问题：需要长时间展示屏幕，但不想频繁移动鼠标
-解决：⌘ ⌃ S 启动防休眠，设置较长间隔（5-10分钟）
-```
-
-### 场景2：下载/处理任务 ⏬
-```
-问题：长时间任务但不想屏幕一直亮着
-解决：⌘ ⌃ S + ⌘ ⌃ B（低亮度模式省电）
+Problem: Enterprise policy auto-locks after 5 minutes, AI agent tasks fail due to screen lock network issues
+Solution: Press ⌘ ⌃ S to enable anti-sleep, set longer interval (5-10 minutes)
 ```
 
-### 场景3：远程工作 💻
+### Case 2: Download/Processing Tasks ⏬
 ```
-问题：需要保持连接但暂时离开
-解决：⌘ ⌃ S 保持活跃状态，避免断开连接
+Problem: Long-running tasks but don't want screen always on
+Solution: ⌘ ⌃ S + ⌘ ⌃ B (Low brightness mode saves power)
 ```
 
-### 场景4：视频播放 🎬
+### Case 3: Remote Work 💻
 ```
-问题：看视频时系统自动休眠
-解决：启动防休眠，享受不间断的观影体验
+Problem: Need to maintain connection but temporarily away
+Solution: ⌘ ⌃ S to keep active, avoid disconnection
+```
+
+### Case 4: Video Playback 🎬
+```
+Problem: System auto-sleeps during video playback
+Solution: Enable anti-sleep for uninterrupted viewing experience
 ```
 
 ---
 
-## 📊 性能影响
-
-| 间隔 | CPU 占用 | 内存占用 | 电量影响 | 推荐场景 |
-|------|---------|---------|---------|---------|
-| 10秒 | ~0.1% | ~20MB | 轻微 | 演示/会议 |
-| 30秒 | ~0.03% | ~20MB | 很小 | 短期任务 |
-| **60秒** | **~0.02%** | **~20MB** | **极小** | **日常使用（推荐）**|
-| 5分钟 | ~0.004% | ~20MB | 可忽略 | 长期任务 |
-
----
-
-## 🛠️ 技术架构
+## 🛠️ Technical Architecture
 
 ```
 MacAfk
-├── AppModel.swift              # 应用状态管理
-├── BrightnessControl.swift     # 双模式亮度控制
-├── Jiggler.swift               # 鼠标抖动引擎
-├── ShortcutManager.swift       # 快捷键管理系统
-├── ShortcutEditorView.swift    # 快捷键编辑器
-├── ContentView.swift           # 主界面
-├── SettingsView.swift          # 设置界面
-└── AppDelegate.swift           # 状态栏集成
+├── AppModel.swift              # Application state management
+├── BrightnessControl.swift     # Dual-mode brightness control
+├── Jiggler.swift               # Mouse jiggling engine
+├── ShortcutManager.swift       # Shortcut management system
+├── ShortcutEditorView.swift    # Shortcut editor
+├── ContentView.swift           # Main interface
+├── SettingsView.swift          # Settings interface
+└── AppDelegate.swift           # Menu bar integration
 ```
+---
 
-### 核心技术
-- **SwiftUI** - 现代化 UI 框架
-- **CoreGraphics** - 鼠标事件模拟
-- **DisplayServices** - 真实亮度控制（Pro）
-- **Gamma 表** - 软件调光（Lite）
-- **NSEvent** - 全局快捷键监听
-- **UserDefaults** - 配置持久化
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+### Development Workflow
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### Code Style
+- Follow Swift official code style guidelines
+- Add necessary comments
+- Update relevant documentation
 
 ---
 
-## 🤝 贡献指南
+## ❓ FAQ
 
-欢迎贡献代码、报告问题或提出建议！
+### Q: Shortcuts not working?
+A: Please ensure MacAfk has been granted permission in "System Settings" → "Privacy & Security" → "Accessibility".
 
-### 开发流程
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
-
-### 代码规范
-- 遵循 Swift 官方代码风格
-- 添加必要的注释
-- 更新相关文档
+### Q: Does it support external displays?
+A: Yes, Pro version supports multiple displays; Lite version mainly targets the main display. Actual effects may vary, multiple displays (more than 2) have not been tested.
 
 ---
 
-## 📝 相关文档
+## 📄 License
 
-- [快捷键使用指南](SHORTCUTS.md)
-- [双版本发布指南](README-DUAL-VERSION.md)
-- [更新日志](CHANGELOG.md)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ---
 
-## ❓ 常见问题
+## 🙏 Acknowledgments
 
-### Q: 快捷键不工作？
-A: 请确保已在「系统设置」→「隐私与安全性」→「辅助功能」中授予 MacAfk 权限。
-
-### Q: Pro 版和 Lite 版怎么选？
-A: 如果追求最佳体验和省电效果，选择 Pro 版；如果需要 App Store 版本，选择 Lite 版。
-
-### Q: 亮度控制不起作用？
-A: Pro 版需要禁用沙盒；Lite 版使用 Gamma 调光，效果与真实亮度不同。
-
-### Q: 会影响电池续航吗？
-A: 使用默认 60 秒间隔，影响极小（<0.02% CPU）。Pro 版的低亮度模式还能省电。
-
-### Q: 支持外接显示器吗？
-A: 是的，Pro 版支持多显示器；Lite 版主要针对主显示器。
-
----
-
-## 📄 许可证
-
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
-
----
-
-## 🙏 致谢
-
-- [MonitorControl](https://github.com/MonitorControl/MonitorControl) - 亮度控制实现参考
-- SwiftUI 社区 - 技术支持
-
----
-
-## 💬 联系方式
-
-- **问题反馈**: [GitHub Issues](https://github.com/yourusername/MacAfk/issues)
-- **功能建议**: [GitHub Discussions](https://github.com/yourusername/MacAfk/discussions)
-- **邮件**: your.email@example.com
+- [MonitorControl](https://github.com/MonitorControl/MonitorControl) - Brightness control implementation reference
+- SwiftUI Community - Technical support
 
 ---
 
 <p align="center">
-  <strong>⭐️ 如果这个项目对你有帮助，请给个 Star！</strong>
+  <strong>⭐️ If this project helps you, please give it a Star!</strong>
 </p>
 
 <p align="center">
-  Made with ❤️ by [Your Name]
+  Made with ❤️ by Sn1waR
 </p>
 
