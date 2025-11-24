@@ -11,6 +11,9 @@ struct SettingsView: View {
             Toggle("settings.enable_low_brightness_mode".localized, isOn: $appModel.isLowBrightness)
                 .help("settings.low_brightness_mode.help".localized)
             
+            Toggle("settings.launch_at_login".localized, isOn: $appModel.launchAtLogin)
+                .help("settings.launch_at_login.help".localized)
+            
             Divider()
             
             Text("settings.shortcuts".localized)

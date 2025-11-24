@@ -28,6 +28,8 @@
 "settings.macafk_settings" = "MacAfk Pro 设置";
 "settings.enable_low_brightness_mode" = "启用低亮度模式";
 "settings.toggle_jiggler_shortcut" = "切换抖动: Cmd + Ctrl + S";
+"settings.launch_at_login" = "开机自启动";
+"settings.launch_at_login.help" = "登录时自动启动 MacAfk Pro";
 
 // Jiggle Interval
 "jiggle.interval" = "抖动间隔:";

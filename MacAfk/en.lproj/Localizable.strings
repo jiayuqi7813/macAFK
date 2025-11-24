@@ -28,6 +28,8 @@
 "settings.macafk_settings" = "MacAfk Pro Settings";
 "settings.enable_low_brightness_mode" = "Enable Low Brightness Mode";
 "settings.toggle_jiggler_shortcut" = "Toggle Jiggler: Cmd + Ctrl + S";
+"settings.launch_at_login" = "Launch at Login";
+"settings.launch_at_login.help" = "Automatically start MacAfk Pro when you log in";
 
 // Jiggle Interval
 "jiggle.interval" = "Jiggle Interval:";

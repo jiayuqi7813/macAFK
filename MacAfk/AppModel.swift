@@ -19,6 +19,14 @@ class AppModel: ObservableObject {
         }
     }
     @Published var testBrightness: Float = 0.5  // 测试用的亮度值（0.0 - 1.0）
+    @Published var launchAtLogin = false {
+        didSet {
+            if !isLoading {
+                saveLaunchAtLogin()
+                LaunchAtLoginHelper.setLaunchAtLogin(enabled: launchAtLogin)
+            }
+        }
+    }
     
     // 子对象：使用普通属性 + Combine 订阅
     let jiggler = Jiggler()
@@ -31,11 +39,13 @@ class AppModel: ObservableObject {
     // 持久化相关
     private let lowBrightnessKey = "app.lowBrightnessMode"
     private let lowBrightnessLevelKey = "app.lowBrightnessLevel"
+    private let launchAtLoginKey = "app.launchAtLogin"
     private var isLoading = false
     
     init() {
         loadLowBrightnessMode()
         loadLowBrightnessLevel()
+        loadLaunchAtLogin()
         // 订阅 jiggler 的变化，转发给 AppModel
         jiggler.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
@@ -164,5 +174,21 @@ class AppModel: ObservableObject {
         // 如果没有保存的值（首次启动），使用默认值 0.0
         lowBrightnessLevel = savedValue == 0 && !UserDefaults.standard.dictionaryRepresentation().keys.contains(lowBrightnessLevelKey) ? 0.0 : savedValue
         print("📖 [AppModel] 已加载低亮度级别: \(Int(lowBrightnessLevel * 100))%")
+    }
+    
+    /// 保存开机自启动状态到 UserDefaults
+    private func saveLaunchAtLogin() {
+        UserDefaults.standard.set(launchAtLogin, forKey: launchAtLoginKey)
+        print("💾 [AppModel] 已保存开机自启动状态: \(launchAtLogin)")
+    }
+    
+    /// 从 UserDefaults 加载开机自启动状态
+    private func loadLaunchAtLogin() {
+        isLoading = true
+        defer { isLoading = false }
+        
+        let savedValue = UserDefaults.standard.bool(forKey: launchAtLoginKey)
+        launchAtLogin = savedValue
+        print("📖 [AppModel] 已加载开机自启动状态: \(launchAtLogin)")
     }
 }

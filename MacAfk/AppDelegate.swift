@@ -16,10 +16,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         if let button = statusItem.button {
             button.image = loadMenuBarIcon(isActive: false)
-            button.action = #selector(toggleMenu)
+            button.action = #selector(statusBarButtonClicked(_:))
+            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
         
-        // Create the menu
+        // Create the menu (不自动弹出)
         constructMenu()
         
         // 监听窗口关闭事件，以便在窗口关闭时隐藏Dock图标
@@ -68,7 +69,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
     
-    @objc func toggleMenu() {
+    @objc func statusBarButtonClicked(_ sender: NSStatusBarButton) {
+        guard let event = NSApp.currentEvent else { return }
+        
+        if event.type == .rightMouseUp {
+            // 右键点击：显示菜单
+            showMenu()
+        } else if event.type == .leftMouseUp {
+            // 左键点击：切换运行状态
+            toggleJiggler()
+        }
+    }
+    
+    @objc func showMenu() {
         statusItem.menu?.popUp(positioning: nil, at: NSEvent.mouseLocation, in: nil)
     }
     
