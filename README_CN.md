@@ -202,7 +202,20 @@ xattr -cr /Applications/MacAfk\ Pro.app/
 A: 请确保已在「系统设置」→「隐私与安全性」→「辅助功能」中授予 MacAfk 权限。
 
 ### Q: 支持外接显示器吗？
-A: 是的，Pro 版支持多显示器；Lite 版主要针对主显示器。以实际效果为准，暂未测试多台显示器以上。
+A: 是的，Pro 版支持多显示器亮度控制。
+
+**技术方案：**
+- **内置显示器**：使用 DisplayServices API（原生硬件控制）
+- **外接显示器**：基于 [BetterDisplay](https://github.com/waydabber/BetterDisplay) 的集成接口
+
+由于技术成本考虑，外接显示器的亮度控制采用 BetterDisplay 的 [Integration API](https://github.com/waydabber/BetterDisplay/wiki/Integration-features,-CLI) 实现。这种方案成熟稳定，支持广泛的外接显示器型号。
+
+**使用前提：**
+1. 安装 [BetterDisplay](https://github.com/waydabber/BetterDisplay)（免费版即可）
+2. 在 BetterDisplay 设置中启用「Integration features」
+3. MacAfk 会自动检测并连接 BetterDisplay
+
+**注意：** Lite 版仅支持主显示器。
 
 ---
 

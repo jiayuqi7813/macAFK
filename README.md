@@ -204,7 +204,20 @@ Then try opening the app again. Alternatively, you can right-click the app and s
 A: Please ensure MacAfk has been granted permission in "System Settings" → "Privacy & Security" → "Accessibility".
 
 ### Q: Does it support external displays?
-A: Yes, Pro version supports multiple displays; Lite version mainly targets the main display. Actual effects may vary, multiple displays (more than 2) have not been tested.
+A: Yes, Pro version supports brightness control for multiple displays.
+
+**Technical Approach:**
+- **Built-in Display**: Uses DisplayServices API (native hardware control)
+- **External Displays**: Based on [BetterDisplay](https://github.com/waydabber/BetterDisplay) integration interface
+
+Due to technical cost considerations, external display brightness control is implemented using BetterDisplay's [Integration API](https://github.com/waydabber/BetterDisplay/wiki/Integration-features,-CLI). This solution is mature, stable, and supports a wide range of external display models.
+
+**Prerequisites:**
+1. Install [BetterDisplay](https://github.com/waydabber/BetterDisplay) (free version works)
+2. Enable "Integration features" in BetterDisplay settings
+3. MacAfk will automatically detect and connect to BetterDisplay
+
+**Note:** Lite version only supports the main display.
 
 ---
 

@@ -49,6 +49,11 @@ struct NewPreferencesView: View {
     @State private var testMessage: String = ""
     @State private var isTestingBrightness = false
     
+    // 环境检测状态
+    @State private var showEnvironmentCheck = false
+    @State private var isCheckingEnvironment = false
+    @State private var checkResults: (installed: Bool, running: Bool, connected: Bool) = (false, false, false)
+    
     var body: some View {
         VStack(spacing: 0) {
             titleBar
@@ -92,6 +97,9 @@ struct NewPreferencesView: View {
                 UpdateAlertView(updateManager: updateManager, isPresented: $showUpdateAlert, release: release)
             }
         }
+        .sheet(isPresented: $showEnvironmentCheck) {
+            environmentCheckDialog
+        }
         .onChange(of: updateManager.updateStatus) { _, newStatus in
             if case .available(let release) = newStatus {
                 latestRelease = release
@@ -126,32 +134,31 @@ struct NewPreferencesView: View {
     // MARK: - Sidebar
     
     private var sidebar: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 4) {
             ForEach(SettingsTab.allCases, id: \.self) { tab in
-                Button(action: {
+                HStack {
+                    Image(systemName: tab.icon)
+                        .foregroundColor(selectedTab == tab ? .white : .primary)
+                        .frame(width: 20)
+                    
+                    Text(tab.localizedKey.localized)
+                        .foregroundColor(selectedTab == tab ? .white : .primary)
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(
+                    selectedTab == tab ? Color.accentColor : Color.clear
+                )
+                .cornerRadius(6)
+                .contentShape(Rectangle()) // 确保整个矩形区域都可以点击
+                .onTapGesture {
                     selectedTab = tab
                     if tab == .displays {
                         selectedDisplay = nil
                     }
-                }) {
-                    HStack {
-                        Image(systemName: tab.icon)
-                            .foregroundColor(selectedTab == tab ? .white : .primary)
-                            .frame(width: 20)
-                        
-                        Text(tab.localizedKey.localized)
-                            .foregroundColor(selectedTab == tab ? .white : .primary)
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 10)
-                    .background(
-                        selectedTab == tab ? Color.accentColor : Color.clear
-                    )
-                    .cornerRadius(6)
                 }
-                .buttonStyle(.plain)
                 .padding(.horizontal, 8)
             }
             
@@ -231,22 +238,37 @@ struct NewPreferencesView: View {
                         .toggleStyle(.switch)
                         .disabled(!betterDisplayManager.isRunning)
                         
-                        // 测试连接按钮
-                        Button {
-                            betterDisplayManager.testConnection { success in
-                                if success {
-                                    betterDisplayManager.refreshDisplays()
+                        HStack(spacing: 8) {
+                            // 测试连接按钮
+                            Button {
+                                betterDisplayManager.testConnection { success in
+                                    if success {
+                                        betterDisplayManager.refreshDisplays()
+                                    }
                                 }
+                            } label: {
+                                HStack {
+                                    Image(systemName: "antenna.radiowaves.left.and.right")
+                                    Text("betterdisplay.test_connection".localized)
+                                }
+                                .font(.caption)
                             }
-                        } label: {
-                            HStack {
-                                Image(systemName: "antenna.radiowaves.left.and.right")
-                                Text("betterdisplay.test_connection".localized)
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+                            
+                            // 环境检测按钮
+                            Button {
+                                performEnvironmentCheck()
+                            } label: {
+                                HStack {
+                                    Image(systemName: "checkmark.shield")
+                                    Text("环境检测")
+                                }
+                                .font(.caption)
                             }
-                            .font(.caption)
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
                         }
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
                     }
                     .padding(.horizontal)
                 } else {
@@ -959,5 +981,185 @@ struct NewPreferencesView: View {
             return true
         }
         return false
+    }
+    
+    // MARK: - Environment Check
+    
+    /// 执行环境检测
+    private func performEnvironmentCheck() {
+        isCheckingEnvironment = true
+        showEnvironmentCheck = true
+        
+        // 检测安装状态
+        betterDisplayManager.checkInstallation()
+        checkResults.installed = betterDisplayManager.isInstalled
+        
+        // 检测运行状态
+        betterDisplayManager.checkIfRunning()
+        checkResults.running = betterDisplayManager.isRunning
+        
+        // 检测连接状态
+        if checkResults.installed && checkResults.running {
+            betterDisplayManager.testConnection { success in
+                DispatchQueue.main.async {
+                    checkResults.connected = success
+                    isCheckingEnvironment = false
+                }
+            }
+        } else {
+            checkResults.connected = false
+            isCheckingEnvironment = false
+        }
+    }
+    
+    /// 环境检测弹窗
+    private var environmentCheckDialog: some View {
+        VStack(spacing: 20) {
+            // 标题
+            HStack {
+                Image(systemName: "checkmark.shield.fill")
+                    .font(.title)
+                    .foregroundColor(.accentColor)
+                Text("BetterDisplay 环境检测")
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
+            .padding(.top)
+            
+            Divider()
+            
+            if isCheckingEnvironment {
+                ProgressView("正在检测...")
+                    .padding()
+            } else {
+                VStack(alignment: .leading, spacing: 16) {
+                    // 1. 安装检测
+                    checkResultRow(
+                        icon: checkResults.installed ? "checkmark.circle.fill" : "xmark.circle.fill",
+                        color: checkResults.installed ? .green : .red,
+                        title: "1. BetterDisplay 安装",
+                        status: checkResults.installed ? "已安装" : "未安装",
+                        action: checkResults.installed ? nil : {
+                            if let url = URL(string: "https://github.com/waydabber/BetterDisplay") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        },
+                        actionTitle: "下载安装"
+                    )
+                    
+                    // 2. 运行检测
+                    checkResultRow(
+                        icon: checkResults.running ? "checkmark.circle.fill" : "xmark.circle.fill",
+                        color: checkResults.running ? .green : .red,
+                        title: "2. BetterDisplay 运行",
+                        status: checkResults.running ? "运行中" : "未运行",
+                        action: !checkResults.running && checkResults.installed ? {
+                            if let url = URL(string: "file:///Applications/BetterDisplay.app") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        } : nil,
+                        actionTitle: "启动应用"
+                    )
+                    
+                    // 3. 连接检测
+                    checkResultRow(
+                        icon: checkResults.connected ? "checkmark.circle.fill" : "xmark.circle.fill",
+                        color: checkResults.connected ? .green : .red,
+                        title: "3. Integration API 连接",
+                        status: checkResults.connected ? "连接成功" : "连接失败",
+                        action: !checkResults.connected && checkResults.running ? {
+                            if let url = URL(string: "https://github.com/waydabber/BetterDisplay/wiki/Integration-features,-CLI") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        } : nil,
+                        actionTitle: "查看设置指南"
+                    )
+                }
+                .padding()
+                
+                // 提示信息
+                if !checkResults.connected && checkResults.running {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(alignment: .top, spacing: 8) {
+                            Image(systemName: "info.circle.fill")
+                                .foregroundColor(.blue)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("连接失败可能的原因：")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                Text("• BetterDisplay 中未启用 Integration features")
+                                    .font(.caption)
+                                Text("• 需要重启 BetterDisplay 使设置生效")
+                                    .font(.caption)
+                            }
+                        }
+                    }
+                    .padding()
+                    .background(Color.blue.opacity(0.1))
+                    .cornerRadius(8)
+                    .padding(.horizontal)
+                }
+            }
+            
+            Divider()
+            
+            // 底部按钮
+            HStack {
+                Button("重新检测") {
+                    performEnvironmentCheck()
+                }
+                .buttonStyle(.bordered)
+                
+                Spacer()
+                
+                Button("完成") {
+                    showEnvironmentCheck = false
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            .padding()
+        }
+        .frame(width: 500)
+        .padding()
+    }
+    
+    /// 检测结果行
+    private func checkResultRow(
+        icon: String,
+        color: Color,
+        title: String,
+        status: String,
+        action: (() -> Void)?,
+        actionTitle: String
+    ) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.title3)
+                .foregroundColor(color)
+                .frame(width: 24)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                Text(status)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+            
+            if let action = action {
+                Button(actionTitle) {
+                    action()
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            }
+        }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 12)
+        .background(Color(nsColor: .controlBackgroundColor))
+        .cornerRadius(8)
     }
 }
