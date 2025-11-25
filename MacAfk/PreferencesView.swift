@@ -10,6 +10,7 @@ struct PreferencesView: View {
     @StateObject private var updateManager = UpdateManager.shared
     @State private var showUpdateAlert = false
     @State private var latestRelease: GitHubRelease?
+    @StateObject private var betterDisplayManager = BetterDisplayManager.shared
     
     var body: some View {
         VStack(spacing: 0) {
@@ -79,6 +80,7 @@ struct PreferencesView: View {
             VStack(alignment: .leading, spacing: 24) {
                 generalSection
                 brightnessSection
+                betterDisplaySection
                 languageSection
                 updateSection
             }
@@ -223,6 +225,137 @@ struct PreferencesView: View {
         Text("settings.brightness_preview_hint".localized)
             .font(.caption)
             .foregroundColor(.secondary)
+    }
+    
+    // MARK: - BetterDisplay Section
+    
+    private var betterDisplaySection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "display.2")
+                    .foregroundColor(.purple)
+                    .font(.title3)
+                
+                Text("betterdisplay.title".localized)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+            }
+            
+            VStack(alignment: .leading, spacing: 12) {
+                if betterDisplayManager.isInstalled {
+                    betterDisplayInstalledView
+                } else {
+                    betterDisplayNotInstalledView
+                }
+            }
+            .padding(.leading, 32)
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(nsColor: .controlBackgroundColor))
+        )
+    }
+    
+    private var betterDisplayInstalledView: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Toggle("betterdisplay.enable_integration".localized, isOn: Binding(
+                get: { betterDisplayManager.isEnabled },
+                set: { newValue in
+                    betterDisplayManager.setEnabled(newValue)
+                    // 更新显示器映射
+                    appModel.brightnessControl.updateDisplayMapping()
+                }
+            ))
+            .toggleStyle(.switch)
+            
+            if betterDisplayManager.isEnabled {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("betterdisplay.integration_hint".localized)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                            .font(.caption)
+                        Text("\(betterDisplayManager.displays.count) " + "betterdisplay.displays_found".localized)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.top, 4)
+                    
+                    if !betterDisplayManager.displays.isEmpty {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(betterDisplayManager.displays) { display in
+                                HStack {
+                                    Image(systemName: "display")
+                                        .foregroundColor(.secondary)
+                                        .font(.caption)
+                                    Text(display.name)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                        .padding(.leading, 20)
+                    }
+                    
+                    Button {
+                        betterDisplayManager.refreshDisplays()
+                        appModel.brightnessControl.updateDisplayMapping()
+                    } label: {
+                        HStack {
+                            Image(systemName: "arrow.clockwise")
+                            Text("betterdisplay.refresh_displays".localized)
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .padding(.top, 4)
+                }
+            } else {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.orange)
+                        .font(.caption)
+                    Text("betterdisplay.disabled_warning".localized)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.top, 4)
+            }
+        }
+    }
+    
+    private var betterDisplayNotInstalledView: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: "exclamationmark.circle.fill")
+                    .foregroundColor(.orange)
+                Text("betterdisplay.not_installed".localized)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            
+            Text("betterdisplay.install_hint".localized)
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            
+            Button {
+                if let url = URL(string: "https://github.com/waydabber/BetterDisplay") {
+                    NSWorkspace.shared.open(url)
+                }
+            } label: {
+                HStack {
+                    Image(systemName: "safari")
+                    Text("Open BetterDisplay")
+                }
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+        }
     }
     
     // MARK: - Language Section

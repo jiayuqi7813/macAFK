@@ -117,3 +117,22 @@
 "permission.accessibility.message" = "MacAfk Pro 需要辅助功能权限来监听全局快捷键和模拟鼠标移动。\n\n请在系统设置中授予权限后重启应用。";
 "permission.open_settings" = "打开系统设置";
 
+// Settings Tabs
+"settings.displays" = "显示设置";
+"settings.general" = "常规设置";
+
+// BetterDisplay Integration
+"betterdisplay.title" = "BetterDisplay 集成";
+"betterdisplay.not_installed" = "未安装 BetterDisplay";
+"betterdisplay.install_hint" = "要控制外接显示器亮度，请从以下地址安装 BetterDisplay：https://github.com/waydabber/BetterDisplay";
+"betterdisplay.enable_integration" = "启用 BetterDisplay 集成";
+"betterdisplay.integration_hint" = "启用后，外接显示器亮度将通过 BetterDisplay 控制。笔记本内置屏幕将继续使用系统原生亮度控制。";
+"betterdisplay.disabled_warning" = "未启用 BetterDisplay 集成时，无法控制外接显示器亮度。仅会调整笔记本内置屏幕亮度。";
+"betterdisplay.displays_found" = "个显示器";
+"betterdisplay.refresh_displays" = "刷新显示器列表";
+"betterdisplay.test_connection" = "测试连接";
+"betterdisplay.running" = "运行中";
+"betterdisplay.not_running" = "未运行";
+"betterdisplay.connection_success" = "连接成功";
+"betterdisplay.connection_failed" = "连接失败";
+

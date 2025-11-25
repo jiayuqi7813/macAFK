@@ -117,3 +117,22 @@
 "permission.accessibility.message" = "MacAfk Pro needs Accessibility permission to monitor global shortcuts and simulate mouse movements.\n\nPlease grant permission in System Settings and restart the app.";
 "permission.open_settings" = "Open System Settings";
 
+// Settings Tabs
+"settings.displays" = "Display Settings";
+"settings.general" = "General Settings";
+
+// BetterDisplay Integration
+"betterdisplay.title" = "BetterDisplay Integration";
+"betterdisplay.not_installed" = "BetterDisplay is not installed";
+"betterdisplay.install_hint" = "To control external monitor brightness, please install BetterDisplay from: https://github.com/waydabber/BetterDisplay";
+"betterdisplay.enable_integration" = "Enable BetterDisplay Integration";
+"betterdisplay.integration_hint" = "When enabled, external monitor brightness will be controlled via BetterDisplay. Built-in display will continue to use native brightness control.";
+"betterdisplay.disabled_warning" = "External monitor brightness control is unavailable when BetterDisplay integration is disabled. Only built-in display brightness will be adjusted.";
+"betterdisplay.displays_found" = "displays detected";
+"betterdisplay.refresh_displays" = "Refresh Display List";
+"betterdisplay.test_connection" = "Test Connection";
+"betterdisplay.running" = "Running";
+"betterdisplay.not_running" = "Not Running";
+"betterdisplay.connection_success" = "Connection successful";
+"betterdisplay.connection_failed" = "Connection failed";
+
